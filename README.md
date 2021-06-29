@@ -5,9 +5,9 @@ Setup and Teardown a local Kubernetes Cluster with a Load Balancer, so that you 
 # Prerequisites
 
 - docker - https://docs.docker.com/get-docker/
-- k3d - https://github.com/rancher/k3d/releases
+- k3d - (v4.4.6) - https://github.com/rancher/k3d/releases
 - jq - https://stedolan.github.io/jq/
-- kubectl - https://kubernetes.io/docs/tasks/tools/
+- kubectls - https://kubernetes.io/docs/tasks/tools/
 
 # Setup
 
