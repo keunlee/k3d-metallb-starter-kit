@@ -1,3 +1,7 @@
+# Overview
+
+Setup and Teardown a local Kubernetes Cluster with a Load Balancer, so that you can deploy to a local environment for local development. 
+
 # Prerequisites
 
 - docker - https://docs.docker.com/get-docker/
