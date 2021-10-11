@@ -5,7 +5,7 @@ Setup and Teardown a local Kubernetes Cluster with a Load Balancer, so that you 
 # Prerequisites
 
 - docker - https://docs.docker.com/get-docker/
-- k3d - (v4.4.6) - https://github.com/rancher/k3d/releases
+- k3d - (v5.0.0) - https://github.com/rancher/k3d/releases
 - jq - https://stedolan.github.io/jq/
 - kubectls - https://kubernetes.io/docs/tasks/tools/
 
@@ -15,7 +15,7 @@ Create the Cluster and validate it's creation:
 
 ```bash
 # create the k3d cluster
-k3d cluster create local-k8s --servers 1 --agents 3 --k3s-server-arg --no-deploy=traefik --wait
+k3d cluster create local-k8s --servers 1 --agents 3 --k3s-arg "--disable=traefik@server:0" --wait
 
 # set kubeconfig to access the k8s context
 export KUBECONFIG=$(k3d kubeconfig write local-k8s)
