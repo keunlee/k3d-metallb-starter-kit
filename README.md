@@ -1,6 +1,6 @@
 # Overview
 
-Setup and Teardown a local Kubernetes Cluster with a Load Balancer, so that you can deploy to a local environment for local development. 
+Setup and Teardown a local Kubernetes Cluster with a Load Balancer, so that you can deploy to a local environment for local development.
 
 # Prerequisites
 
@@ -11,14 +11,11 @@ Setup and Teardown a local Kubernetes Cluster with a Load Balancer, so that you 
 
 # Setup
 
-Create the Cluster and validate it's creation: 
+Create the Cluster and validate it's creation:
 
 ```bash
 # create the k3d cluster
 k3d cluster create local-k8s --servers 1 --agents 3 --k3s-arg "--disable=traefik@server:0" --wait
-
-# set kubeconfig to access the k8s context
-export KUBECONFIG=$(k3d kubeconfig write local-k8s)
 
 # validate the cluster master and worker nodes
 kubectl get nodes
@@ -27,14 +24,19 @@ kubectl get nodes
 Deploy the Load Balancer:
 
 ```bash
-# determine loadbalancer ingress range
-cidr_block=$(docker network inspect k3d-local-k8s | jq '.[0].IPAM.Config[0].Subnet' | tr -d '"')
+
+for cluster_name in $(docker network list --format "{{ .Name}}" | grep k3d); do
+
+cidr_block=$(docker network inspect $cluster_name | jq '.[0].IPAM.Config[0].Subnet' | tr -d '"')
 cidr_base_addr=${cidr_block%???}
 ingress_first_addr=$(echo $cidr_base_addr | awk -F'.' '{print $1,$2,255,0}' OFS='.')
 ingress_last_addr=$(echo $cidr_base_addr | awk -F'.' '{print $1,$2,255,255}' OFS='.')
 ingress_range=$ingress_first_addr-$ingress_last_addr
 
-# deploy metallb 
+# switch context to current cluster
+kubectl config use-context $cluster_name
+
+# deploy metallb
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
 
@@ -53,6 +55,8 @@ data:
       addresses:
       - $ingress_range
 EOF
+done
+
 ```
 
 # Validation
@@ -76,7 +80,7 @@ curl $external_ip
 Expected Output:
 
 ```bash
-# expected output: 
+# expected output:
 
 <!DOCTYPE html>
 <html>
