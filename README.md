@@ -37,8 +37,8 @@ ingress_range=$ingress_first_addr-$ingress_last_addr
 kubectl config use-context $cluster_name
 
 # deploy metallb
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/namespace.yaml
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.10.2/manifests/metallb.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.12.1/manifests/metallb.yaml
 
 # configure metallb ingress address range
 cat <<EOF | kubectl apply -f -
