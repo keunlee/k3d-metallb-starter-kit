@@ -71,7 +71,7 @@ kubectl create deployment nginx --image=nginx
 kubectl expose deployment nginx --port=80 --type=LoadBalancer
 
 # obtain the ingress external ip
-external_ip=$(k get svc nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+external_ip=$(kubectl get svc nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 # test the loadbalancer external ip
 curl $external_ip
